@@ -1,5 +1,5 @@
 // this is the main receiver file that will receive two values from sender and generate different values from associated files
-
+int relayPin = 2;
 //header files for nrf use
 #include <SPI.h>
 #include <nRF24L01.h>
@@ -12,7 +12,7 @@
 
 //header for MPU6050
 #include "Wire.h"
-#include <MPU6050_light.h>
+#include <MPU6050_light.h>`
 
 //calling the function of other file
 extern void loopNRF();
@@ -20,10 +20,17 @@ extern void loopReadTemperature();
 extern void loopReadAngleAcceleration();
 extern void loopReadDistance();
 
+
 //variable for nrf Setup
 // Define CE and CSN pins for ESP32-S3
 RF24 radio(4, 5);  // CE on GPIO 4, CSN on GPIO 5
 const byte address[6] = "00001";
+
+float dataReceived[32];
+
+// extern float dataReceived[0];
+// extern float dataReceived[1];
+
 
 //variable for temp reading
 #define DHTPIN 16
@@ -44,6 +51,29 @@ void setup() {
   setupReadTemperature();
   setupReadAngleAcceleration();
   setupReadDistance();
+  pinMode(relayPin, OUTPUT);
+  // Keep checking until the radio is available
+  // while (!radio.available()) {
+  //   Serial.println("Waiting for radio...");
+  //   delay(500);
+  // }
+  // while (!(dataReceived[0] > 3000)) {
+  //   Serial.println("Please Wear Helmet...");
+  //   //Serial.println(dataReceived[0]);
+  //   loopNRF();
+  //   delay(500);
+  // }
+  // Serial.print("Helmet Detected ");
+  // while (!(dataReceived[1] < 0.15)) {
+  //   Serial.println("You Have Consumed Alcohol...");
+  //   delay(500);
+  // }
+  // Serial.println("Alcohol Not Detected");
+  // // // Once the radio is available, start checking other conditions
+  // // while (radio.available() && dataReceived[0] > 3000 && dataReceived[1] < 0.15) {
+  // //     digitalWrite(relayPin, HIGH);
+  // //     Serial.println("Power ON");
+  // // }
 }
 
 void loop() {
@@ -72,7 +102,7 @@ void setupNRF() {
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_MAX);
   radio.setDataRate(RF24_2MBPS);
-  radio.setChannel(119);  // Example of setting a higher channel
+  radio.setChannel(119);  
   radio.startListening();
 }
 void setupReadTemperature() {

@@ -21,6 +21,10 @@ void loopReadDistance() {
     Serial.print(distance_cm);
     Serial.println(" cm");
     Serial.println("");
+  } else {
+    Serial.print("Distance: ");
+    Serial.print("distance>400");
+    Serial.println("");
   }
 
   delay(200);  // Adjust delay if needed
